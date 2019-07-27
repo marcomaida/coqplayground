@@ -100,8 +100,3 @@ Definition all_zero (nb: nybble) : bool :=
 
 Compute (all_zero (bits B0 B0 B1 B0)).
 Compute (all_zero (bits B0 B0 B0 B0)).
-
-(* 
-NEXT UP:
-https://softwarefoundations.cis.upenn.edu/lf-current/Basics.html MODULES 
-*)
