@@ -158,12 +158,50 @@ Qed.
 (* NEXT: More on Notation (Optional) and exercise https://softwarefoundations.cis.upenn.edu/lf-current/Basics.html *)
 
 Theorem andTrueElim: forall b c : bool, 
-                     andb b c = true -> c = true.
-Proof. intros [] b.
+                     andb b c %bool = true -> c = true.
+Proof. intros [] [].
   -simpl. reflexivity.
+  -intros []. simpl. reflexivity.
   -simpl. reflexivity.
-  -simpl. reflexivity.
-  -simpl. reflexivity.
+  -intros []. simpl. reflexivity. 
+Qed.
+
+Theorem identity_fn_applied_twice :
+  forall(f : bool -> bool),
+  (forall(x : bool), f x = x) ->
+  forall(b : bool), f (f b) = b.
+Proof. intros f x b. rewrite x. rewrite x. reflexivity. Qed.
+
+Theorem andb_eq_orb :
+  forall(b c : bool),
+  (andb b c = orb b c) ->
+  b = c.
+Proof. intros b c. destruct b.
+  -simpl. destruct c. reflexivity. easy.
+  -simpl. destruct c. easy. easy.
+
+Inductive bin : Type :=
+ | Z
+ | O (n : bin)
+ | I (n : bin).
+
+Fixpoint allOne(m:bin) : bool :=
+  match m with
+  | Z => true
+  | I m' => allOne m'
+  | O m' => false
+  end.
 
 
+(* TODO fix incr of binary representation *)
+Fixpoint incr(m:bin) : bin :=
+  match m with
+  | Z   => Z
+  | O m' => if allOne m' then I (incr m') else O (incr m')
+  | I m' => if allOne m' then I (incr(m')) else I (incr m')
+  end.
 
+Compute incr (O Z).
+Compute incr (I Z).
+Compute incr (I (O Z)).
+Compute incr (I (I Z)).
